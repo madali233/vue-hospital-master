@@ -9,6 +9,7 @@ package com.ml.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.ml.config.redis.RedisService;
 import com.ml.entity.User;
 import com.ml.uilts.JwtUtils;
 import com.ml.uilts.LoginResult;
@@ -34,6 +35,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Resource
     private JwtUtils jwtUtils;
+
+    @Resource
+    private RedisService redisService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -61,6 +65,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         outputStream.write(result.getBytes(StandardCharsets.UTF_8));
         outputStream.flush();
         outputStream.close();
+        //把生成的token存到redis
+        String tokenKey = "token_"+token;
+        redisService.set(tokenKey,token,jwtUtils.getExpiration() / 1000);
     }
 }
 
