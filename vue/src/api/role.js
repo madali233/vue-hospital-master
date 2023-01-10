@@ -1,38 +1,49 @@
-import request from '@/utils/request'
+import http from '@/utils/request'
 
 export function getRoutes() {
-  return request({
-    url: '/vue-element-admin/routes',
-    method: 'get'
-  })
+
 }
 
-export function getRoles() {
-  return request({
-    url: '/vue-element-admin/roles',
-    method: 'get'
-  })
-}
+/**
+* 查询角色列表
+* @returns
+*/
+export async function getRoles(params) {
+  return await http.get("/api/role/list", params);
 
-export function addRole(data) {
-  return request({
-    url: '/vue-element-admin/role',
-    method: 'post',
-    data
-  })
 }
-
-export function updateRole(id, data) {
-  return request({
-    url: `/vue-element-admin/role/${id}`,
-    method: 'put',
-    data
-  })
+/**
+* 添加角色
+* @returns
+*/
+export async function addRole(params) {
+  return await http.post("/api/role/add", params);
+}
+/**
+* 编辑角色
+* @returns
+*/
+export async function updateRole(params) {
+  return await http.put("/api/role/update", params);
 }
 
 export function deleteRole(id) {
-  return request({
-    url: `/vue-element-admin/role/${id}`,
-    method: 'delete'
-  })
+
 }
+
+/**
+* 查询分配权限树列表
+* @returns
+*/
+export async function getAssignTreeApi(params){
+return await http.get("/api/role/getAssignPermissionTree",params);
+}
+
+/**
+* 分配权限
+* @returns
+*/
+export async function assignSaveApi(params){
+  return await http.post("/api/role/saveRoleAssign",params);
+}
+  

@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setTokenTime } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
@@ -25,7 +25,12 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
-  }
+  },
+  //设置用户ID
+  SET_USERUID: (state, userId) => {
+    state.userId = userId
+  },
+  
 }
 
 const actions = {
@@ -37,11 +42,12 @@ const actions = {
       //调用src/api/user.js文件中的login()方法
       login({ username: username.trim(), password: password }).then(response => {
         //从response中解构出返回的token数据
-        const { token } = response
+        const { token, expireTime } = response
         //将返回的token数据保存到store中，作为全局变量使用
         commit('SET_TOKEN', token)
         //将token信息保存到cookie中
         setToken(token)
+        setTokenTime(expireTime);
         resolve()
       }).catch(error => {
         reject(error)
@@ -59,7 +65,9 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction } = data
+        //此处解构出用户ID
+        const { roles, name, avatar, introduction,id } = data
+
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -70,11 +78,14 @@ const actions = {
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
+        //将用户ID保存到Vuex中
+        commit('SET_USERUID', id);//用户ID
         resolve(data)
       }).catch(error => {
         reject(error)
       })
     })
+
   },
 
   // user logout

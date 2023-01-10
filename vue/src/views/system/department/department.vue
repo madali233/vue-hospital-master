@@ -4,7 +4,7 @@
         <el-form :model="searchModel" ref="searchForm" label-width="80px"
         :inline="true" size="small">
         <el-form-item>
-        <el-input placeholder="请输入部门名称" v-model="searchModel.departmentName">
+        <el-input placeholder="请输入科室名称" v-model="searchModel.departmentName">
         </el-input>
         </el-form-item>
         <el-form-item>
@@ -24,10 +24,10 @@
         default-expand-all
         :tree-props="{ children: 'children' }"
         >
-        <el-table-column prop="departmentName" label="部门名称"></el-table-column>
+        <el-table-column prop="departmentName" label="科室名称"></el-table-column>
         <el-table-column prop="parentName" label="所属部门"></el-table-column>
-        <el-table-column prop="phone" label="部门电话"></el-table-column>
-        <el-table-column prop="address" label="部门位置"></el-table-column>
+        <el-table-column prop="phone" label="科室电话"></el-table-column>
+        <el-table-column prop="address" label="科室位置"></el-table-column>
         <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
         <el-button
